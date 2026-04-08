@@ -1,13 +1,6 @@
-# Yarrboard Firmware
+# FrothFET Firmware
 
-This is the firmware that runs on a [Yarrboard](https://github.com/hoeken/yarrboard) compatible board.  Current boards include:
-
-* [FrothFET - 8 Channel Digital Switching](https://github.com/hoeken/frothfet)
-* [Brineomatic - Watermaker Controller](https://github.com/hoeken/brineomatic)
-
-The project is based around the amazing esp32 and mainly supports boards based around that.
-
-Pronounced *yarrrrrrr * bird*.  Lots of r's and don't call it a board. ;)
+This is the firmware that runs on a [FrothFET](https://github.com/hoeken/frothfet) compatible board.
 
 ## Installation and Setup (dev mode)
 
