@@ -9,7 +9,7 @@
 #ifndef YARR_CONFIG_H
 #define YARR_CONFIG_H
 
-#define YB_FIRMWARE_VERSION "2.5.0"
+#define YB_FIRMWARE_VERSION "2.5.1"
 
 #if defined YB_CONFIG_FROTHFET_REV_D
   #include "./configs/config.frothfet-rev-d.h"
@@ -17,26 +17,28 @@
   #include "./configs/config.frothfet-rev-e.h"
 #elif defined YB_CONFIG_FROTHFET_REV_F
   #include "./configs/config.frothfet-rev-f.h"
-#elif defined YB_CONFIG_BRINEOMATIC_REV_A
-  #include "./configs/config.brineomatic-rev-a.h"
-#elif defined YB_CONFIG_BRINEOMATIC_REV_B
-  #include "./configs/config.brineomatic-rev-b.h"
-#elif defined YB_CONFIG_BRINEOMATIC_REV_C
-  #include "./configs/config.brineomatic-rev-c.h"
-#elif defined YB_CONFIG_SENDIT_REV_A
-  #include "./configs/config.sendit-rev-a.h"
-#elif defined YB_CONFIG_SENDIT_REV_B
-  #include "./configs/config.sendit-rev-b.h"
-#elif defined YB_CONFIG_SENDIT_REV_C
-  #include "./configs/config.sendit-rev-c.h"
-#elif defined WAVESHARE_ESP32_S3_ETH_8DI_8RO
-  #include "./configs/config.waveshare-s3-eth-8di-8ro.h"
 #else
   #error "No board config has been defined"
 #endif
 
+#ifndef YB_BOARD_NAME
+  #define YB_BOARD_NAME "FrothFet"
+#endif
+
+#ifndef YB_PROJECT_NAME
+  #define YB_PROJECT_NAME "FrothFet"
+#endif
+
+#ifndef YB_PROJECT_URL
+  #define YB_PROJECT_URL "https://github.com/hoeken/frothfet"
+#endif
+
 #ifndef YB_GIT_URL
-  #define YB_GIT_URL "https://github.com/hoeken/yarrboard-firmware"
+  #define YB_GIT_URL "https://github.com/hoeken/frothfet-firmware"
+#endif
+
+#ifndef YB_OTA_MANIFEST_URL
+  #define YB_OTA_MANIFEST_URL "https://hoeken.github.io/frothfet-firmware/releases/ota_manifest.json";
 #endif
 
 #ifndef YB_IS_DEVELOPMENT
@@ -44,20 +46,17 @@
 #endif
 
 // basic board defines.
-#ifndef YB_BOARD_NAME
-  #define YB_BOARD_NAME "Yarrboard"
-#endif
 #ifndef YB_PIEZO_DEFAULT_MELODY
   #define YB_PIEZO_DEFAULT_MELODY "NONE"
 #endif
 #ifndef YB_DEFAULT_HOSTNAME
-  #define YB_DEFAULT_HOSTNAME "yarrboard"
+  #define YB_DEFAULT_HOSTNAME "frothfet"
 #endif
 #ifndef YB_DEFAULT_AP_MODE
   #define YB_DEFAULT_AP_MODE "ap"
 #endif
 #ifndef YB_DEFAULT_AP_SSID
-  #define YB_DEFAULT_AP_SSID "Yarrboard"
+  #define YB_DEFAULT_AP_SSID "FrothFet"
 #endif
 #ifndef YB_DEFAULT_AP_PASS
   #define YB_DEFAULT_AP_PASS ""
