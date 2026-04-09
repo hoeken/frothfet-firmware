@@ -8,6 +8,10 @@
 
 #include "config.h"
 
+#include "controllers/BusVoltageController.h"
+#include "controllers/FanController.h"
+#include "controllers/PWMController.h"
+#include "gulp/gulped.h"
 #include <Arduino.h>
 #include <LittleFS.h>
 #include <YarrboardFramework.h>
@@ -15,6 +19,9 @@
 
 YarrboardApp yba;
 NavicoController navico(yba);
+FanController fans(yba);
+BusVoltageController bus_voltage(yba);
+PWMController pwm(yba);
 
 #ifdef YB_HAS_PIEZO
   #include "controllers/BuzzerController.h"
@@ -26,41 +33,9 @@ BuzzerController buzzer(yba);
 RGBController<WS2812B, YB_STATUS_RGB_PIN, YB_STATUS_RGB_ORDER> rgb(yba, YB_STATUS_RGB_COUNT);
 #endif
 
-#ifdef YB_IS_FROTHFET
-  #include "controllers/BusVoltageController.h"
-  #include "controllers/FanController.h"
-  #include "controllers/PWMController.h"
-  #include "gulp/logo-frothfet.png.h"
-
-FanController fans(yba);
-BusVoltageController bus_voltage(yba);
-PWMController pwm(yba);
-#elifdef YB_IS_BRINEOMATIC
-  #include "brineomatic.h"
-  #include "controllers/BrineomaticController.h"
-  #include "controllers/RelayController.h"
-  #include "controllers/ServoController.h"
-  #include "controllers/StepperController.h"
-  #include "gulp/logo-brineomatic.png.h"
-
-RelayController relays(yba);
-ServoController servos(yba);
-StepperController steppers(yba);
-BrineomaticController bom(yba, relays, servos, steppers);
-#elifdef YB_IS_SENDIT
-  #include "controllers/ADCController.h"
-  #include "gulp/logo-sendit.png.h"
-ADCController adc(yba);
-#endif
-
-#include "gulp/index.html.h"
-
 void setup()
 {
   yba.registerController(navico);
-
-#ifdef YB_HAS_ADC_CHANNELS
-#endif
 
 #ifdef YB_HAS_PIEZO
   buzzer.buzzerPin = YB_PIEZO_PIN;
@@ -76,7 +51,6 @@ void setup()
   yba.registerController(rgb);
 #endif
 
-#ifdef YB_IS_FROTHFET
   bus_voltage.address = YB_BUS_VOLTAGE_ADDRESS;
   bus_voltage.r1 = YB_BUS_VOLTAGE_R1;
   bus_voltage.r2 = YB_BUS_VOLTAGE_R2;
@@ -91,23 +65,7 @@ void setup()
   fans.pwm = &pwm;
   yba.registerController(fans);
 
-  yba.http.registerGulpedFile(&logo_frothfet_png, "/logo.png");
-  yba.ota.firmware_manifest_url = "https://hoeken.github.io/frothfet-firmware/releases/ota_manifest.json";
-
-#elifdef YB_IS_BRINEOMATIC
-  yba.registerController(relays);
-  yba.registerController(servos);
-  yba.registerController(steppers);
-  yba.registerController(bom);
-
-  yba.http.registerGulpedFile(&logo_brineomatic_png, "/logo.png");
-  yba.ota.firmware_manifest_url = "https://hoeken.github.io/brineomatic-firmware/releases/ota_manifest.json";
-
-#elifdef YB_IS_SENDIT
-  yba.registerController(adc);
-
-  yba.http.registerGulpedFile(&logo_sendit_png, "/logo.png");
-#endif
+  yba.http.registerGulpedFiles(gulpedFiles, gulpedFilesCount);
 
   yba.board_name = YB_BOARD_NAME;
   yba.default_hostname = YB_DEFAULT_HOSTNAME;
