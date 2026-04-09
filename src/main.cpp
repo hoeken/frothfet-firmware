@@ -95,8 +95,6 @@ rgu4zp1Wfh2Q5QMX6bTrDCTn52KdyJ6z2WTnafaA08zeKOP+uVAPT0HLShF/ITEX
 -----END PUBLIC KEY-----
 )PUBLIC_KEY";
 
-  yba.http.registerGulpedFile(&index_html);
-
   yba.setup();
 }
 
