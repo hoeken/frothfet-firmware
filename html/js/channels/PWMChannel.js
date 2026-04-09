@@ -553,10 +553,13 @@
         <td id="pwmOverheatCount${this.id}" class= "text-end"></td >
       </tr>
     `);
+
+    $('#pwmStats' + this.id).toggle(this.enabled);
   };
 
   PWMChannel.prototype.updateStatsUI = function (stats) {
     if (this.enabled) {
+      $('#pwmStats' + this.id).show();
       $('#pwmWattHours' + this.id).html(YB.Util.formatWattHours(stats.wH));
       $('#pwmOnCount' + this.id).html(stats.state_change_count.toLocaleString("en-US"));
       $('#pwmTripCount' + this.id).html(stats.soft_fuse_trip_count.toLocaleString("en-US"));
@@ -568,6 +571,8 @@
       PWMChannel.total_trip_count += parseInt(stats.soft_fuse_trip_count);
       PWMChannel.total_overheat_count += parseInt(stats.overheat_count);
     }
+    else
+      $('#pwmStats' + this.id).hide();
 
     $('#pwmWattHoursTotal').html(YB.Util.formatWattHours(PWMChannel.total_wh));
     $('#pwmOnCountTotal').html(PWMChannel.total_on_count.toLocaleString("en-US"));
