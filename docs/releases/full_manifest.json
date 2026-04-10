@@ -5,6 +5,12 @@
     "description": "",
     "firmware": [
       {
+        "version": "2.5.1",
+        "url": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_E/2.5.1.bin",
+        "espwebtools_manifest": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_E/2.5.1-espwebtools/manifest.json",
+        "changelog": "# Version 2.5.1\n\n## \ud83d\udee0\ufe0f Improvements & Enhancements\n\n- Moved MCP3564 ADC helper into its own dedicated file (`mcp3564helper.cpp/h`)\n- Removed ADS1115Helper class (not used in FrothFET)\n- Removed unused JavaScript libraries (Sortable, c3, d3)\n- Removed deprecated FrothFET Rev D board configuration\n- Removed unused `validate.cpp/h`\n\n## \ud83d\udc1b Bug Fixes\n\n- Fixed disabled channel stats rows not hiding properly in the UI\n- Fixed firmware updater page\n\n## Infrastructure\n\n- Repository split: FrothFET firmware is now in its own dedicated repository\n  - Removed all Brineomatic and SendIt source code, channel types, and UI files\n  - Removed non-FrothFET board configurations and logos\n- Updated URLs to reflect new repository location\n- Removed local development settings from `platformio.ini`\n\n---"
+      },
+      {
         "version": "2.5.0",
         "url": "https://hoeken.github.io/yarrboard-firmware/releases/FROTHFET_REV_E/2.5.0.bin",
         "espwebtools_manifest": "https://hoeken.github.io/yarrboard-firmware/releases/FROTHFET_REV_E/2.5.0-espwebtools/manifest.json",
@@ -35,6 +41,12 @@
     "image": "img/frothfet_rev_f.jpg",
     "description": "",
     "firmware": [
+      {
+        "version": "2.5.1",
+        "url": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_F/2.5.1.bin",
+        "espwebtools_manifest": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_F/2.5.1-espwebtools/manifest.json",
+        "changelog": "# Version 2.5.1\n\n## \ud83d\udee0\ufe0f Improvements & Enhancements\n\n- Moved MCP3564 ADC helper into its own dedicated file (`mcp3564helper.cpp/h`)\n- Removed ADS1115Helper class (not used in FrothFET)\n- Removed unused JavaScript libraries (Sortable, c3, d3)\n- Removed deprecated FrothFET Rev D board configuration\n- Removed unused `validate.cpp/h`\n\n## \ud83d\udc1b Bug Fixes\n\n- Fixed disabled channel stats rows not hiding properly in the UI\n- Fixed firmware updater page\n\n## Infrastructure\n\n- Repository split: FrothFET firmware is now in its own dedicated repository\n  - Removed all Brineomatic and SendIt source code, channel types, and UI files\n  - Removed non-FrothFET board configurations and logos\n- Updated URLs to reflect new repository location\n- Removed local development settings from `platformio.ini`\n\n---"
+      },
       {
         "version": "2.5.0",
         "url": "https://hoeken.github.io/yarrboard-firmware/releases/FROTHFET_REV_F/2.5.0.bin",
