@@ -13,6 +13,6 @@
 			"image": "img/frothfet_rev_f.jpg"
 		}
 	],
-	"firmware_url_base": "https://hoeken.github.io/frothfet-firmware/releases/",
+	"firmware_url_base": "https://firmware.frothfet.com/releases/",
 	"signing_key_path": "~/Dropbox/misc/yarrboard/yarrboard-firmware.pem"
 }

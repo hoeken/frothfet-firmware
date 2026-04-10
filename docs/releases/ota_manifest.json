@@ -2,13 +2,13 @@
     {
         "type": "FROTHFET_REV_E",
         "version": "2.5.1",
-        "url": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_E/2.5.1.bin",
-        "changelog": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_E/CHANGELOG-2.5.1.md"
+        "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/2.5.1.bin",
+        "changelog": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/CHANGELOG-2.5.1.md"
     },
     {
         "type": "FROTHFET_REV_F",
         "version": "2.5.1",
-        "url": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_F/2.5.1.bin",
-        "changelog": "https://hoeken.github.io/frothfet-firmware/releases/FROTHFET_REV_F/CHANGELOG-2.5.1.md"
+        "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_F/2.5.1.bin",
+        "changelog": "https://firmware.frothfet.com/releases/FROTHFET_REV_F/CHANGELOG-2.5.1.md"
     }
 ]
