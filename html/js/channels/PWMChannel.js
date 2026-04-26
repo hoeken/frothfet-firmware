@@ -444,7 +444,7 @@
 
   PWMChannel.prototype.toggleState = function () {
     if (this.data.state != "OVERHEAT")
-      YB.client.togglePWMChannel(this.id, "webui", true);
+      YB.client.togglePWMChannel(this.id, "web ui", true);
   }
 
   PWMChannel.prototype.updateControlUI = function () {
@@ -624,17 +624,19 @@
                 <td style="white-space:nowrap">${dateStr}</td>
                 <td>${ch.name}</td>
                 <td>${ch.statusBadgeHtml(entry.status)}</td>
+                <td>${entry.source}</td>
               </tr>
             `;
         }).join('');
 
         $('#frothfetLogContent').html(`
-          <table id="frothfetRunLogTable" class="table table-sm">
+          <table id="frothfetLogTable" class="table table-sm">
             <thead>
               <tr>
                 <th style="white-space:nowrap">Timestamp</th>
                 <th style="white-space:nowrap">Channel</th>
                 <th style="white-space:nowrap">Status</th>
+                <th style="white-space:nowrap">Source</th>
               </tr>
             </thead>
             <tbody>${rows}</tbody>
@@ -660,7 +662,7 @@
 
   PWMChannel.deleteLogs = function () {
     if (confirm("Are you sure you want to delete your logs?  This cannot be reversed.")) {
-      YB.App.showAlert("Run logs have been deleted.", "primary");
+      YB.App.showAlert("FrothFet logs have been deleted.", "primary");
       YB.client.send({
         "cmd": "frothfet_delete_logs"
       }, true);
@@ -696,8 +698,18 @@
 
   // load our logs
   logsPage.onOpen(PWMChannel.loadStateLog);
-
   YB.App.addPage(logsPage);
+
+  //get totalRuntime
+  YB.App.onStart(function () {
+    let deleteButton = `
+      <button id="deleteFrothfetLogsButton" class="btn btn-warning" type="button">
+        Delete FrothFet Logs
+      </button>
+    `;
+    $("#dangerZone").prepend(deleteButton);
+    $("#deleteFrothfetLogsButton").on("click", YB.PWMChannel.deleteLogs);
+  });
 
   // expose to global
   global.YB = YB;
