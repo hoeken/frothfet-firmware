@@ -1,6 +1,5 @@
 # LONG TERM:
 
-* add state change log similar to brineomatic
 * update yarrboard client if any changes needed - probably for state
 * update signalk plugin - same
 

@@ -55,6 +55,11 @@ input[type=range][orient=vertical] {
     vertical-align: bottom;
 }
 
+.text-bg-overheat {
+    color: #fff !important;
+    background-color: #fd7e14 !important;
+}
+
 .btn-overheat {
     --bs-btn-color: #fff;
     --bs-btn-bg: #fd7e14;

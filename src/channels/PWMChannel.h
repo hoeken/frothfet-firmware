@@ -36,6 +36,8 @@
     #include <Temperature_LM75_Derived.h>
   #endif
 
+class YarrboardApp;
+
 class PWMChannel : public BaseChannel
 {
   private:
@@ -49,6 +51,7 @@ class PWMChannel : public BaseChannel
 
     byte pin = 0;
     unsigned long lastStateChange = 0;
+    unsigned long lastLogStatus = 0;
 
     struct GammaState {
         uint8_t pin = 255;
@@ -140,6 +143,7 @@ class PWMChannel : public BaseChannel
     String blownMelody = YB_BLOWN_MELODY;
     String overheatMelody = YB_OVERHEAT_MELODY;
 
+    YarrboardApp* app = nullptr;
     ConfigManager* _cfg = nullptr;
     BusVoltageController* busVoltage = nullptr;
     RGBControllerInterface* rgb = nullptr;
@@ -212,6 +216,8 @@ class PWMChannel : public BaseChannel
     void setState(const char* state);
     void setState(bool newState);
     void writePWM(uint16_t pwm);
+
+    void logStatus();
 
     void startFade(float duty, int fade_time);
     void setDuty(float duty);

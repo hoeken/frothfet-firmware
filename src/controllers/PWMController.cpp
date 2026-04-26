@@ -34,9 +34,14 @@ bool PWMController::setup()
 {
   _instance = this; // Capture the instance for callbacks
 
+  PsychicHttpServer* server = _app.http.getServer();
+  if (server)
+    server->serveStatic("/frothfet_log.json", LittleFS, "/frothfet_log.json");
+
   _app.protocol.registerCommand(GUEST, "set_pwm_channel", this, &PWMController::handleSetCommand);
   _app.protocol.registerCommand(GUEST, "toggle_pwm_channel", this, &PWMController::handleToggleCommand);
   _app.protocol.registerCommand(ADMIN, "config_pwm_channel", this, &PWMController::handleConfigCommand);
+  _app.protocol.registerCommand(ADMIN, "frothfet_delete_logs", this, &PWMController::handleDeleteLogs);
 
   #ifdef YB_PWM_CHANNEL_CURRENT_ADC_DRIVER_MCP3564
 
@@ -96,6 +101,7 @@ bool PWMController::setup()
     ch.busVoltage = busVoltage;
     ch.rgb = rgb;
     ch.buzzer = (BuzzerController*)_app.getController("buzzer");
+    ch.app = &_app;
 
     ch.setup();
     ch.setupLedc();
@@ -323,6 +329,12 @@ void PWMController::handleToggleCommand(JsonVariantConst input, JsonVariant outp
   // OFF and BYPASS can be turned on.
   else
     ch->setState("ON");
+}
+
+void PWMController::handleDeleteLogs(JsonVariantConst input, JsonVariant output, ProtocolContext context)
+{
+  if (!LittleFS.remove("/frothfet_log.json"))
+    return _app.protocol.generateErrorJSON(output, "Error deleting logs.");
 }
 
 #endif

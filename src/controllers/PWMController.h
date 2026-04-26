@@ -40,6 +40,7 @@ class PWMController : public ChannelController<PWMChannel, YB_PWM_CHANNEL_COUNT>
     void handleSetCommand(JsonVariantConst input, JsonVariant output, ProtocolContext context);
     void handleToggleCommand(JsonVariantConst input, JsonVariant output, ProtocolContext context);
     void handleConfigCommand(JsonVariantConst input, JsonVariant output, ProtocolContext context);
+    void handleDeleteLogs(JsonVariantConst input, JsonVariant output, ProtocolContext context);
 
   private:
   #ifdef YB_PWM_CHANNEL_CURRENT_ADC_DRIVER_MCP3564

@@ -218,6 +218,8 @@ void PWMChannel::handleINA226Trip()
 
   if (buzzer)
     buzzer->playMelodyByName(this->trippedMelody.c_str());
+
+  this->logStatus();
 }
 
   #endif
@@ -632,6 +634,8 @@ void PWMChannel::checkFuseBlown()
 
         if (buzzer)
           buzzer->playMelodyByName(this->blownMelody.c_str());
+
+        this->logStatus();
       }
     }
   }
@@ -665,6 +669,8 @@ void PWMChannel::checkFuseBypassed()
 
       if (buzzer)
         buzzer->playMelodyByName(this->bypassMelody.c_str());
+
+      this->logStatus();
     }
   } else if (this->status == Status::BYPASSED) {
     if (!this->outputState && this->getAverageVoltage() < 2.0) {
@@ -722,6 +728,8 @@ void PWMChannel::checkSoftFuse()
 
       if (buzzer)
         buzzer->playMelodyByName(this->trippedMelody.c_str());
+
+      this->logStatus();
     }
   }
 }
@@ -757,6 +765,8 @@ void PWMChannel::checkOverheat()
 
       if (buzzer)
         buzzer->playMelodyByName(this->overheatMelody.c_str());
+
+      this->logStatus();
     }
   } else if (this->status == Status::OVERHEAT) {
     // are we too hot?
@@ -1009,6 +1019,8 @@ void PWMChannel::setState(bool newState)
     // change our output pin to reflect
     this->updateOutput(true);
 
+    this->logStatus();
+
     // flag for update to clients
     this->sendFastUpdate = true;
   }
@@ -1060,6 +1072,28 @@ const char* PWMChannel::getStatus()
     return "OVERHEAT";
   else
     return "OFF";
+}
+
+void PWMChannel::logStatus()
+{
+  unsigned long now = millis();
+  if (now - lastLogStatus < 1000)
+    return;
+  lastLogStatus = now;
+
+  JsonDocument log;
+
+  log["timestamp"] = (uint32_t)app->ntp.getTime();
+  log["id"] = this->id;
+  log["status"] = getStatus();
+  log["source"] = this->source;
+
+  File f = LittleFS.open("/frothfet_log.json", "a");
+  if (f) {
+    serializeJson(log, f);
+    f.println();
+    f.close();
+  }
 }
 
 void PWMChannel::haGenerateDiscovery(JsonVariant doc, const char* uuid, MQTTController* mqtt)

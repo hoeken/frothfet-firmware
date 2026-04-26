@@ -580,6 +580,93 @@
     $('#pwmOverheatCountTotal').html(PWMChannel.total_overheat_count.toLocaleString("en-US"));
   };
 
+  PWMChannel.prototype.statusClass = function (status) {
+    switch (status) {
+      case "ON": return "text-bg-success";
+      case "OFF": return "text-bg-secondary";
+      case "TRIPPED": return "text-bg-warning";
+      case "BLOWN": return "text-bg-danger";
+      case "BYPASSED": return "text-bg-primary";
+      case "OVERHEAT": return "text-bg-overheat";
+      default: return "text-bg-info";
+    }
+  };
+
+  PWMChannel.prototype.statusBadgeHtml = function (mode) {
+    return `<span class="badge ${this.statusClass(mode)}">${mode}</span>`;
+  };
+
+  PWMChannel.loadStateLog = function () {
+    $.ajax({
+      url: '/frothfet_log.json',
+      dataType: 'text',
+      success: function (text) {
+        var lines = text.trim().split('\n').filter(function (l) { return l.trim(); });
+        if (!lines.length) {
+          $('#frothfetLogContent').html('<p class="text-muted">No log entries recorded.</p>');
+          return;
+        }
+
+        var entries = lines.map(function (l) { return JSON.parse(l); }).reverse();
+
+        var rows = entries.map(function (entry) {
+          var dt = new Date(entry.timestamp * 1000);
+          var dateStr = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0') + ' ' + String(dt.getHours()).padStart(2, '0') + ':' + String(dt.getMinutes()).padStart(2, '0');
+          var runtimeStr = YB.Util.secondsToDhms(entry.total_runtime, 2);
+
+          let ch = YB.ChannelRegistry.getChannelById(entry.id, "pwm");
+
+          if (ch === null)
+            return ''
+          else
+            return `
+              <tr>
+                <td style="white-space:nowrap">${dateStr}</td>
+                <td>${ch.name}</td>
+                <td>${ch.statusBadgeHtml(entry.status)}</td>
+              </tr>
+            `;
+        }).join('');
+
+        $('#frothfetLogContent').html(`
+          <table id="frothfetRunLogTable" class="table table-sm">
+            <thead>
+              <tr>
+                <th style="white-space:nowrap">Timestamp</th>
+                <th style="white-space:nowrap">Channel</th>
+                <th style="white-space:nowrap">Status</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>
+          <a href="/frothfet_log.json" class="btn btn-small btn-primary">Download log as JSON</a>
+        `);
+
+        if (!YB.App.isMFD()) {
+          var tableEl = document.getElementById('frothfetLogTable');
+          new Tablesort(tableEl);
+        }
+
+        let page = YB.App.getPage("logs");
+        page.ready = true;
+      },
+      error: function () {
+        $('#frothfetLogContent').html('<p class="text-danger">No run log found.</p>');
+        let page = YB.App.getPage("logs");
+        page.ready = true;
+      }
+    });
+  };
+
+  PWMChannel.deleteLogs = function () {
+    if (confirm("Are you sure you want to delete your logs?  This cannot be reversed.")) {
+      YB.App.showAlert("Run logs have been deleted.", "primary");
+      YB.client.send({
+        "cmd": "frothfet_delete_logs"
+      }, true);
+    }
+  };
+
   YB.PWMChannel = PWMChannel;
   YB.ChannelRegistry.registerChannelType("pwm", YB.PWMChannel)
 
@@ -588,6 +675,29 @@
     $('#pwmTotalAmps').html(YB.Util.formatNumber(parseFloat(msg.total_amperage), 1) + 'A');
     $('#pwmTotalWatts').html(YB.Util.formatNumber(parseFloat(msg.total_wattage), 1) + 'W');
   });
+
+  // Create a custom page
+  let logsPage = new YB.Page({
+    name: 'logs',
+    displayName: 'Logs',
+    permissionLevel: 'guest',
+    showInNavbar: true,
+    position: "stats",
+    ready: false,
+    content: `
+      <div id="frothfetLog" class="row mb-3">
+        <h3>Status Log</h3>
+        <div id="frothfetLogContent">
+        Loading...
+        </div>
+      </div>
+    `
+  });
+
+  // load our logs
+  logsPage.onOpen(PWMChannel.loadStateLog);
+
+  YB.App.addPage(logsPage);
 
   // expose to global
   global.YB = YB;
