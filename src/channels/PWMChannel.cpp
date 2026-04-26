@@ -210,7 +210,7 @@ void PWMChannel::handleINA226Trip()
 
   this->softFuseTripCount = this->softFuseTripCount + 1;
   this->sendFastUpdate = true;
-  strlcpy(this->source, _cfg->local_hostname, sizeof(this->source));
+  strlcpy(this->source, "frothfet", sizeof(this->source));
 
   char prefIndex[YB_PREF_KEY_LENGTH];
   sprintf(prefIndex, "pwmTripCount%d", this->id);
@@ -713,7 +713,7 @@ void PWMChannel::checkSoftFuse()
       this->sendFastUpdate = true;
 
       // this is an internally originating change
-      strlcpy(this->source, _cfg->local_hostname, sizeof(this->source));
+      strlcpy(this->source, "frothfet", sizeof(this->source));
 
       // save to our storage
       char prefIndex[YB_PREF_KEY_LENGTH];
@@ -748,7 +748,7 @@ void PWMChannel::checkOverheat()
       this->sendFastUpdate = true;
 
       // this is an internally originating change
-      strlcpy(this->source, _cfg->local_hostname, sizeof(this->source));
+      strlcpy(this->source, "frothfet", sizeof(this->source));
 
       // save to our storage
       char prefIndex[YB_PREF_KEY_LENGTH];
@@ -1243,34 +1243,39 @@ void PWMChannel::init(uint8_t id)
   snprintf(this->name, sizeof(this->name), "PWM Channel %d", id);
 }
 
-bool PWMChannel::loadConfig(JsonVariantConst config, char* error, size_t len)
+bool PWMChannel::sanitizeConfig(JsonVariant config, char* error, size_t err_size)
 {
-  // make our parent do the work.
-  if (!BaseChannel::loadConfig(config, error, len))
+  if (!BaseChannel::sanitizeConfig(config, error, err_size))
     return false;
 
-  isDimmable = config["isDimmable"] | true;
-
   if (config["softFuse"]) {
-    softFuseAmperage = config["softFuse"];
-    softFuseAmperage = constrain(softFuseAmperage, 0, YB_PWM_CHANNEL_MAX_AMPS);
+    float val = config["softFuse"];
+    config["softFuse"] = constrain(val, 0.0f, (float)YB_PWM_CHANNEL_MAX_AMPS);
   }
+
+  return true;
+}
+
+void PWMChannel::loadConfig(JsonVariantConst config)
+{
+  BaseChannel::loadConfig(config);
+
+  isDimmable = config["isDimmable"] | true;
+  softFuseAmperage = config["softFuse"] | (float)YB_PWM_CHANNEL_MAX_AMPS;
 
   strlcpy(this->type, config["type"] | "other", sizeof(this->type));
   strlcpy(this->defaultState, config["defaultState"] | "OFF", sizeof(this->defaultState));
   strlcpy(this->softFuseType, config["softFuseType"] | YB_PWM_CHANNEL_SOFT_FUSE_TYPE, sizeof(this->softFuseType));
 
   this->bypassMelody = config["bypassMelody"] | YB_BYPASS_MELODY;
-  this->bypassMelody = config["trippedMelody"] | YB_TRIPPED_MELODY;
-  this->bypassMelody = config["blownMelody"] | YB_BLOWN_MELODY;
-  this->bypassMelody = config["overheatMelody"] | YB_OVERHEAT_MELODY;
-
-  return true;
+  this->trippedMelody = config["trippedMelody"] | YB_TRIPPED_MELODY;
+  this->blownMelody = config["blownMelody"] | YB_BLOWN_MELODY;
+  this->overheatMelody = config["overheatMelody"] | YB_OVERHEAT_MELODY;
 }
 
-void PWMChannel::generateConfig(JsonVariant config)
+void PWMChannel::generateConfig(JsonVariant config, UserRole role, ConfigPurpose purpose)
 {
-  BaseChannel::generateConfig(config);
+  BaseChannel::generateConfig(config, role, purpose);
 
   config["type"] = this->type;
   config["hasCurrent"] = true;

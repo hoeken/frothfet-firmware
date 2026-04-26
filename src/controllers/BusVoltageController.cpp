@@ -36,11 +36,6 @@ void BusVoltageController::loop()
   busADC->onLoop();
 }
 
-void BusVoltageController::generateConfigHook(JsonVariant config)
-{
-  config["bus_voltage"] = true;
-}
-
 void BusVoltageController::generateUpdateHook(JsonVariant output)
 {
   output["bus_voltage"] = getBusVoltage();

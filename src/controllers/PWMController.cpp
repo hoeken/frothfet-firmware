@@ -100,7 +100,7 @@ bool PWMController::setup()
     ch.setup();
     ch.setupLedc();
 
-    strlcpy(ch.source, _cfg.local_hostname, sizeof(ch.source));
+    strlcpy(ch.source, "frothfet", sizeof(ch.source));
   }
 
   for (auto& ch : _channels) {
@@ -276,7 +276,7 @@ void PWMController::handleSetCommand(JsonVariantConst input, JsonVariant output,
     }
 
     // get our data
-    strlcpy(ch->source, input["source"] | _cfg.local_hostname, sizeof(ch->source));
+    strlcpy(ch->source, input["source"] | "frothfet", sizeof(ch->source));
 
     // okay, set our state
     char state[10];
@@ -286,7 +286,7 @@ void PWMController::handleSetCommand(JsonVariantConst input, JsonVariant output,
     ch->setState(state);
 
     //  get that update out ASAP... if its our own update
-    if (!strcmp(ch->source, _cfg.local_hostname))
+    if (!strcmp(ch->source, "frothfet"))
       ch->sendFastUpdate = true;
   }
 }
@@ -315,7 +315,7 @@ void PWMController::handleToggleCommand(JsonVariantConst input, JsonVariant outp
   }
 
   // save our source
-  strlcpy(ch->source, input["source"] | _cfg.local_hostname, sizeof(ch->source));
+  strlcpy(ch->source, input["source"] | "frothfet", sizeof(ch->source));
 
   // these states should all change to off
   if (!strcmp(ch->getStatus(), "ON") || !strcmp(ch->getStatus(), "TRIPPED") || !strcmp(ch->getStatus(), "BLOWN"))

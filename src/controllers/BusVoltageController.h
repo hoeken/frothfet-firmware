@@ -29,7 +29,6 @@ class BusVoltageController : public BaseController
     void loop() override;
     float getBusVoltage();
 
-    void generateConfigHook(JsonVariant config) override;
     void generateUpdateHook(JsonVariant output) override;
     void generateFastUpdateHook(JsonVariant output) override;
     void generateStatsHook(JsonVariant output) override;
