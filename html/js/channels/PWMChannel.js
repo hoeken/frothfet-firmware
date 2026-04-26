@@ -607,7 +607,8 @@
           return;
         }
 
-        var entries = lines.map(function (l) { return JSON.parse(l); }).reverse();
+        //only the latest 100 entries are shown.
+        var entries = lines.slice(-100).map(function (l) { return JSON.parse(l); }).reverse();
 
         var rows = entries.map(function (entry) {
           var dt = new Date(entry.timestamp * 1000);
