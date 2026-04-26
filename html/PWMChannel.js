@@ -604,51 +604,47 @@
         var lines = text.trim().split('\n').filter(function (l) { return l.trim(); });
         if (!lines.length) {
           $('#frothfetLogContent').html('<p class="text-muted">No log entries recorded.</p>');
+          let page = YB.App.getPage("logs");
+          page.ready = true;
           return;
         }
 
-        //only the latest 100 entries are shown.
-        var entries = lines.slice(-100).map(function (l) { return JSON.parse(l); }).reverse();
+        var entries = lines.map(function (l) { return JSON.parse(l); }).reverse();
 
-        var rows = entries.map(function (entry) {
+        var tableData = entries.reduce(function (acc, entry) {
+          let ch = YB.ChannelRegistry.getChannelById(entry.id, "pwm");
+          if (ch === null) return acc;
+
           var dt = new Date(entry.timestamp * 1000);
           var dateStr = dt.getFullYear() + '-' + String(dt.getMonth() + 1).padStart(2, '0') + '-' + String(dt.getDate()).padStart(2, '0') + ' ' + String(dt.getHours()).padStart(2, '0') + ':' + String(dt.getMinutes()).padStart(2, '0');
-          var runtimeStr = YB.Util.secondsToDhms(entry.total_runtime, 2);
 
-          let ch = YB.ChannelRegistry.getChannelById(entry.id, "pwm");
+          acc.push({ timestamp: dateStr, channel: ch.name, status: entry.status, statusBadge: ch.statusBadgeHtml(entry.status), source: entry.source });
+          return acc;
+        }, []);
 
-          if (ch === null)
-            return ''
-          else
-            return `
-              <tr>
-                <td style="white-space:nowrap">${dateStr}</td>
-                <td>${ch.name}</td>
-                <td>${ch.statusBadgeHtml(entry.status)}</td>
-                <td>${entry.source}</td>
-              </tr>
-            `;
-        }).join('');
+        $('#frothfetLogContent').html('<div id="frothfetLogTable"></div><a href="/frothfet_log.json" class="btn btn-small btn-primary mt-2">Download log as JSON</a>');
 
-        $('#frothfetLogContent').html(`
-          <table id="frothfetLogTable" class="table table-sm">
-            <thead>
-              <tr>
-                <th style="white-space:nowrap">Timestamp</th>
-                <th style="white-space:nowrap">Channel</th>
-                <th style="white-space:nowrap">Status</th>
-                <th style="white-space:nowrap">Source</th>
-              </tr>
-            </thead>
-            <tbody>${rows}</tbody>
-          </table>
-          <a href="/frothfet_log.json" class="btn btn-small btn-primary">Download log as JSON</a>
-        `);
-
-        if (!YB.App.isMFD()) {
-          var tableEl = document.getElementById('frothfetLogTable');
-          new Tablesort(tableEl);
-        }
+        new gridjs.Grid({
+          data: tableData.map(function (row) {
+            return [row.timestamp, row.channel, row.statusBadge, row.source];
+          }),
+          columns: [
+            { name: "Timestamp", sort: true },
+            { name: "Channel", sort: true },
+            { name: "Status", sort: true, formatter: function (cell) { return gridjs.html(cell); } },
+            { name: "Source", sort: true },
+          ],
+          pagination: { limit: 25 },
+          search: {
+            selector: function (cell, rowIndex, cellIndex) {
+              if (typeof cell !== 'string') return cell;
+              var text = cellIndex === 2 ? cell.replace(/<[^>]*>/g, '') : cell;
+              return text.toLowerCase();
+            }
+          },
+          sort: true,
+          style: { table: { width: '100%' } },
+        }).render(document.getElementById('frothfetLogTable'));
 
         let page = YB.App.getPage("logs");
         page.ready = true;
