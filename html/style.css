@@ -74,3 +74,23 @@ input[type=range][orient=vertical] {
     --bs-btn-disabled-bg: #fd7e14;
     --bs-btn-disabled-border-color: #fd7e14;
 }
+
+/* gridjs dark mode — ID scope beats all gridjs class selectors regardless of load order */
+#frothfetLogTable .gridjs-container { color: var(--bs-body-color); }
+#frothfetLogTable .gridjs-wrapper { border-color: var(--bs-border-color); }
+#frothfetLogTable .gridjs-footer { background-color: var(--bs-body-bg); border-color: var(--bs-border-color); }
+#frothfetLogTable .gridjs-tbody,
+#frothfetLogTable td.gridjs-td { background-color: var(--bs-body-bg); }
+#frothfetLogTable td.gridjs-td { border-color: var(--bs-border-color); color: var(--bs-body-color); }
+#frothfetLogTable th.gridjs-th { background-color: var(--bs-tertiary-bg); border-color: var(--bs-border-color); color: var(--bs-secondary-color); }
+#frothfetLogTable th.gridjs-th-sort:hover,
+#frothfetLogTable th.gridjs-th-sort:focus { background-color: var(--bs-secondary-bg); }
+#frothfetLogTable .gridjs-tr-selected td { background-color: var(--bs-primary-bg-subtle); }
+#frothfetLogTable .gridjs-pagination { color: var(--bs-body-color); }
+#frothfetLogTable input.gridjs-input { background-color: var(--bs-body-bg); border-color: var(--bs-border-color); color: var(--bs-body-color); }
+#frothfetLogTable input.gridjs-input:focus { border-color: var(--bs-primary); box-shadow: 0 0 0 3px rgba(var(--bs-primary-rgb), .25); }
+#frothfetLogTable .gridjs-pagination .gridjs-pages button { background-color: var(--bs-body-bg); border-color: var(--bs-border-color); color: var(--bs-body-color); }
+#frothfetLogTable .gridjs-pagination .gridjs-pages button:hover { background-color: var(--bs-secondary-bg); color: var(--bs-emphasis-color); }
+#frothfetLogTable .gridjs-pagination .gridjs-pages button:disabled,
+#frothfetLogTable .gridjs-pagination .gridjs-pages button[disabled] { background-color: var(--bs-body-bg); color: var(--bs-secondary-color); }
+#frothfetLogTable .gridjs-pagination .gridjs-pages button.gridjs-currentPage { background-color: var(--bs-secondary-bg); }
