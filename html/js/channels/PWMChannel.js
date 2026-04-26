@@ -444,7 +444,7 @@
 
   PWMChannel.prototype.toggleState = function () {
     if (this.data.state != "OVERHEAT")
-      YB.client.togglePWMChannel(this.id, YB.App.config.hostname, true);
+      YB.client.togglePWMChannel(this.id, "webui", true);
   }
 
   PWMChannel.prototype.updateControlUI = function () {
