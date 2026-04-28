@@ -1,5 +1,7 @@
 # Version 2.6.0
 
+> **Note:** This release has some breaking changes, particularly around the config system and controller architecture. Migration from v2.x should be seamless, but there may be bugs requiring a config edit.  **BACK UP YOUR CONFIG BEFORE YOU UPGRADE**
+
 ## 🚀 New Features
 
 - **State Change Logging**
