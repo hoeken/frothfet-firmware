@@ -602,6 +602,7 @@
       dataType: 'text',
       success: function (text) {
         var lines = text.trim().split('\n').filter(function (l) { return l.trim(); });
+
         if (!lines.length) {
           $('#frothfetLogContent').html('<p class="text-muted">No log entries recorded.</p>');
           let page = YB.App.getPage("logs");
