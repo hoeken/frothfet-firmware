@@ -5,6 +5,12 @@
     "description": "",
     "firmware": [
       {
+        "version": "2.6.0",
+        "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/2.6.0.bin",
+        "espwebtools_manifest": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/2.6.0-espwebtools/manifest.json",
+        "changelog": "# Version 2.6.0\n\n> **Note:** This release has some breaking changes, particularly around the config system and controller architecture. Migration from v2.x should be seamless, but there may be bugs requiring a config edit.  **BACK UP YOUR CONFIG BEFORE YOU UPGRADE**\n\n## \ud83d\ude80 New Features\n\n- **State Change Logging**\n  - Backend now logs channel state changes (on/off, fuse blown, soft fuse trip, bypass, overheat) with timestamp to `/frothfet_log.json` on the device\n  - New State Log tab in the UI displays the history as a sortable, searchable table\n  - Logs are debounced (1-second minimum between entries) to avoid flooding during rapid events\n  - Only the latest 100 entries are displayed in the UI\n\n- **Dark Mode**\n  - gridjs now respects the browser/OS dark mode preference\n\n## \ud83d\udee0\ufe0f Improvements & Enhancements\n\n- Using [Grid.js](https://gridjs.io/) for a clean log table \u2014 sorting, search, and pagination built in\n- Grid.js table renders correctly on B&G MFD displays\n- Reorganized Grid.js assets into a dedicated `html/gridjs/` folder\n\n## Infrastructure\n\n- Updated to YarrboardFramework v3.0\n- Added `sdkconfig.defaults` to enable PSRAM\n- Fixed firmware OTA URL in release manifests\n\n---"
+      },
+      {
         "version": "2.5.1",
         "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/2.5.1.bin",
         "espwebtools_manifest": "https://firmware.frothfet.com/releases/FROTHFET_REV_E/2.5.1-espwebtools/manifest.json",
@@ -41,6 +47,12 @@
     "image": "img/frothfet_rev_f.jpg",
     "description": "",
     "firmware": [
+      {
+        "version": "2.6.0",
+        "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_F/2.6.0.bin",
+        "espwebtools_manifest": "https://firmware.frothfet.com/releases/FROTHFET_REV_F/2.6.0-espwebtools/manifest.json",
+        "changelog": "# Version 2.6.0\n\n> **Note:** This release has some breaking changes, particularly around the config system and controller architecture. Migration from v2.x should be seamless, but there may be bugs requiring a config edit.  **BACK UP YOUR CONFIG BEFORE YOU UPGRADE**\n\n## \ud83d\ude80 New Features\n\n- **State Change Logging**\n  - Backend now logs channel state changes (on/off, fuse blown, soft fuse trip, bypass, overheat) with timestamp to `/frothfet_log.json` on the device\n  - New State Log tab in the UI displays the history as a sortable, searchable table\n  - Logs are debounced (1-second minimum between entries) to avoid flooding during rapid events\n  - Only the latest 100 entries are displayed in the UI\n\n- **Dark Mode**\n  - gridjs now respects the browser/OS dark mode preference\n\n## \ud83d\udee0\ufe0f Improvements & Enhancements\n\n- Using [Grid.js](https://gridjs.io/) for a clean log table \u2014 sorting, search, and pagination built in\n- Grid.js table renders correctly on B&G MFD displays\n- Reorganized Grid.js assets into a dedicated `html/gridjs/` folder\n\n## Infrastructure\n\n- Updated to YarrboardFramework v3.0\n- Added `sdkconfig.defaults` to enable PSRAM\n- Fixed firmware OTA URL in release manifests\n\n---"
+      },
       {
         "version": "2.5.1",
         "url": "https://firmware.frothfet.com/releases/FROTHFET_REV_F/2.5.1.bin",
