@@ -210,7 +210,7 @@ void PWMChannel::handleINA226Trip()
 
   this->softFuseTripCount = this->softFuseTripCount + 1;
   this->sendFastUpdate = true;
-  strlcpy(this->source, "frothfet", sizeof(this->source));
+  strlcpy(this->source, "firmware", sizeof(this->source));
 
   char prefIndex[YB_PREF_KEY_LENGTH];
   sprintf(prefIndex, "pwmTripCount%d", this->id);
@@ -719,7 +719,7 @@ void PWMChannel::checkSoftFuse()
       this->sendFastUpdate = true;
 
       // this is an internally originating change
-      strlcpy(this->source, "frothfet", sizeof(this->source));
+      strlcpy(this->source, "firmware", sizeof(this->source));
 
       // save to our storage
       char prefIndex[YB_PREF_KEY_LENGTH];
@@ -756,7 +756,7 @@ void PWMChannel::checkOverheat()
       this->sendFastUpdate = true;
 
       // this is an internally originating change
-      strlcpy(this->source, "frothfet", sizeof(this->source));
+      strlcpy(this->source, "firmware", sizeof(this->source));
 
       // save to our storage
       char prefIndex[YB_PREF_KEY_LENGTH];
@@ -1241,28 +1241,26 @@ void PWMChannel::haPublishState(MQTTController* mqtt)
 void PWMChannel::haHandleCommand(const char* topic, const char* payload)
 {
   if (!strcmp(ha_topic_cmd_state, topic)) {
+    char old_source[sizeof(this->source)];
+    strlcpy(old_source, this->source, sizeof(old_source));
+    strlcpy(this->source, "mqtt", sizeof(this->source));
     if (!strcmp(payload, "ON"))
       this->setState(true);
     else
       this->setState(false);
+    strlcpy(this->source, old_source, sizeof(this->source));
   }
 
-  // set our brightness
   if (!strcmp(ha_topic_cmd_brightness, topic)) {
-    // Parse payload into integer (0–255)
     int value = atoi(payload);
     if (value < 0)
       value = 0;
     if (value > 255)
       value = 255;
 
-    // Convert to float (0.0–1.0)
     float duty = (float)value / 255.0f;
 
-    // Set duty cycle
     this->setDuty(duty);
-
-    // turn it on
     this->updateOutput(true);
   }
 }

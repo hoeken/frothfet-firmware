@@ -1,3 +1,7 @@
+# v2.7
+
+* update source to not be hardcoded as frothfet.
+
 # LONG TERM:
 
 * update yarrboard client if any changes needed - probably for state
